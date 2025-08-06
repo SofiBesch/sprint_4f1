@@ -1,6 +1,6 @@
 package ordertestscooter;
 
-import BaseTest.DriverFactory;
+import DriverFactory.DriverFactory;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

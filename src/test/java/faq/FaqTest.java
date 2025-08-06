@@ -1,5 +1,5 @@
 package faq;
-import BaseTest.DriverFactory;
+import DriverFactory.DriverFactory;
 
 import org.junit.Rule;
 import org.junit.Test;
