@@ -4,6 +4,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
 
 public class OrderPage {
     private final WebDriver driver;
@@ -13,6 +14,8 @@ public class OrderPage {
     private final By surnameField = By.xpath(".//input[@placeholder='* Фамилия']");
     private final By addressField = By.xpath(".//input[@placeholder='* Адрес: куда привезти заказ']");
     private final By metroField = By.xpath(".//input[@placeholder='* Станция метро']");
+    //вынесла второй локатор
+    private final By metroStationOption = By.xpath(".//div[@class='Order_Text__2broi']");
     private final By numberField = By.xpath(".//input[@placeholder='* Телефон: на него позвонит курьер']");
     private final By nextButton = By.xpath(".//button[text()='Далее']");
     // локаторы для второй страницы заказа
@@ -42,8 +45,14 @@ public class OrderPage {
     }
     private void setMetroStation(String station) {
         driver.findElement(metroField).click();
-        driver.findElement(By.xpath(String.format(".//div[@class='Order_Text__2broi' and text()='%s']", station))).click();
 
+        List<WebElement> stations = driver.findElements(metroStationOption);
+        for (WebElement element : stations) {
+            if (station.equals(element.getText())) {
+                element.click();
+                return;
+            }
+        }
 
     }
     public void clickNextButton() {
@@ -100,7 +109,7 @@ public class OrderPage {
 
     }
     public void clickOrderButton(){
-//        driver.findElement(orderButton).click();
+
         wait.until(ExpectedConditions.elementToBeClickable(orderButton)).click();
     }
     public void clickConfirmButton(){

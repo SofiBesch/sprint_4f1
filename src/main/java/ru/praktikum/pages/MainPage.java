@@ -36,7 +36,7 @@ public class MainPage {
     }
 
     public void clickFaqQuestion(int index) {
-    //    driver.findElements(FAQ_QUESTION).get(index).click();
+
         WebElement question = wait.until(ExpectedConditions.elementToBeClickable(
                 driver.findElements(FAQ_QUESTION).get(index)
         ));
@@ -63,5 +63,11 @@ public class MainPage {
 
     public void scrollToFaqSection() {
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight/2)");
+    }
+    //добавлен метод проверки текста ответа
+    public String getFaqAnswerText(int index) {
+        return wait.until(ExpectedConditions.visibilityOf(
+                driver.findElements(FAQ_ANSWER).get(index)
+        )).getText();
     }
 }
