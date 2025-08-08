@@ -1,12 +1,18 @@
-package pages;
+package ru.praktikum.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 import java.util.List;
 
 public class MainPage {
     private final WebDriver driver;
+    private final WebDriverWait wait;
 
     public static final By TOP_ORDER_BUTTON = By.xpath(".//button[contains(@class, 'Button_Button__ra12g') and text()='Заказать'][1]");
     public static final By BOTTOM_ORDER_BUTTON = By.xpath(".//div[contains(@class, 'Home_FinishButton')]/button[text()='Заказать']");
@@ -17,8 +23,10 @@ public class MainPage {
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
     }
+
     public void clickCookieButton() {
         driver.findElement(COOKIE_BUTTON).click();
     }
@@ -28,7 +36,17 @@ public class MainPage {
     }
 
     public void clickFaqQuestion(int index) {
-        driver.findElements(FAQ_QUESTION).get(index).click();
+    //    driver.findElements(FAQ_QUESTION).get(index).click();
+        WebElement question = wait.until(ExpectedConditions.elementToBeClickable(
+                driver.findElements(FAQ_QUESTION).get(index)
+        ));
+        question.click();
+
+        // Ждем видимый ответ
+        wait.until(ExpectedConditions.visibilityOf(
+                driver.findElements(FAQ_ANSWER).get(index)
+        ));
+
     }
 
     public boolean isFaqAnswerDisplayed(int index) {
@@ -41,5 +59,9 @@ public class MainPage {
 
     public void clickBottomOrderButton() {
         driver.findElement(BOTTOM_ORDER_BUTTON).click();
+    }
+
+    public void scrollToFaqSection() {
+        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight/2)");
     }
 }

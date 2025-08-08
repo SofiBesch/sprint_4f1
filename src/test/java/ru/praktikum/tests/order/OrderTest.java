@@ -1,19 +1,16 @@
-package ordertestscooter;
+package ru.praktikum.tests.order;
 
-import DriverFactory.DriverFactory;
+import ru.praktikum.driver.DriverFactory;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.MainPage;
-import pages.OrderPage;
-import java.time.Duration;
-import static org.junit.Assert.assertTrue;
+import ru.praktikum.pages.MainPage;
+import ru.praktikum.pages.OrderPage;
+
+
 
 @RunWith(Parameterized.class)
 public class OrderTest extends DriverFactory {
@@ -62,17 +59,16 @@ public class OrderTest extends DriverFactory {
 
     private void makeOrder(boolean fromTopButton){
         WebDriver driver = factory.getDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         MainPage mainPage = new MainPage(driver);
+        OrderPage orderPage = new OrderPage(driver);
         mainPage.clickCookieButton();
         if (fromTopButton){
-            wait.until(ExpectedConditions.elementToBeClickable(MainPage.TOP_ORDER_BUTTON)).click();
+            mainPage.clickTopOrderButton();
         }else {
-            WebElement bottomButton = wait.until(ExpectedConditions.presenceOfElementLocated(MainPage.BOTTOM_ORDER_BUTTON));
-            ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", bottomButton);
-            bottomButton.click();
+            orderPage.scrollToElement(driver.findElement(MainPage.BOTTOM_ORDER_BUTTON));
+            mainPage.clickBottomOrderButton();
         }
-        OrderPage orderPage = new OrderPage(driver);
+
 
         orderPage.fillFirstPage(name, surname, address, metro, number);
         orderPage.clickNextButton();
@@ -84,7 +80,9 @@ public class OrderTest extends DriverFactory {
         orderPage.clickConfirmButton();
 
 
-        assertTrue("Не отобразилось окно успешного заказа", orderPage.isSuccessModalDisplayed());
+        orderPage.waitForOrderSuccess();
+        Assert.assertTrue(orderPage.isOrderStatusButtonDisplayed());
+
     }
 
 }

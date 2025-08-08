@@ -1,4 +1,4 @@
-package DriverFactory;
+package ru.praktikum.driver;
 
 import org.junit.rules.ExternalResource;
 import org.openqa.selenium.WebDriver;
@@ -24,7 +24,7 @@ public class DriverFactory extends ExternalResource {
     }
 
     private void startChrome() {
-        //System.setProperty("webdriver.chrome.driver", "D:\\draivervonychka\\chromedriver-win64\\chromedriver.exe");
+
         driver = new ChromeDriver();
         driver.manage().window().maximize();
 
@@ -32,7 +32,7 @@ public class DriverFactory extends ExternalResource {
     }
 
     private void startFireFox() {
-        //System.setProperty("webdriver.gecko.driver", "D:\\draivervonychka\\geckodriver.exe");
+
         driver = new FirefoxDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
